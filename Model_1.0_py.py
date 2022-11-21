@@ -49,7 +49,7 @@ def downsample(filters, size, apply_batchnorm=True):
 # In[4]:
 
 
-def load_data(test=False,Print=False,path=f'{os.path.abspath(os.curdir)}/data/carseg_data/clean_data',nr_img=1498):
+def load_data(test=False,Print=False,path='/data',nr_img=1498):
     train_data_input=[]
     train_data_target=[]
     
@@ -200,8 +200,9 @@ def Generator():
 # In[12]:
 
 
-generator = Generator()
-tf.keras.utils.plot_model(generator, show_shapes=True, dpi=64)
+#generator = Generator()
+#dot_img_file = 'generator.png'
+#tf.keras.utils.plot_model(generator, to_file=dot_img_file, show_shapes=True, dpi=64)
 
 
 # # loos
@@ -272,8 +273,9 @@ def Discriminator():
 # In[17]:
 
 
-discriminator = Discriminator()
-tf.keras.utils.plot_model(discriminator, show_shapes=True, dpi=64)
+#discriminator = Discriminator()
+#dot_img_file_d = 'discriminator.png'
+#tf.keras.utils.plot_model(discriminator, to_file=dot_img_file_d, show_shapes=True, dpi=64)
 
 
 # In[18]:
@@ -312,7 +314,7 @@ def generate_images(model, test_input, tar):
     # Getting the pixel values in the [0, 1] range to plot.
     plt.imshow(display_list[i])
     plt.axis('off')
-  plt.show()
+  plt.savefig('generate_images.png')
 
 
 # In[21]:
@@ -403,18 +405,18 @@ generate_images(generator, test_data[0][2], test_data[1][2])
 g=generator(test_data[0][2],training=True)
 print(tf.keras.layers.Softmax(g[0]))
 plt.imshow(tf.keras.layers.Softmax(g[0]))
-plt.show()
+plt.savefig('output_softmax.png')
 
 
 # In[ ]:
 
 
 plt.imshow(test_data[1][2][0])
-plt.show()
+plt.savefig('test_data.png')
 t=[test_data[1][2]==1]
 t=t[0][0]
 plt.imshow(t)
-plt.show()
+plt.savefig('target_and_image.png')
 
 
 # In[ ]:
