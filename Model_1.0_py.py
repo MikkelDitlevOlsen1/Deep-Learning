@@ -87,7 +87,7 @@ train_data=load_data()
 # In[6]:
 
 def Get_stats(data):
-    print(f'Number of training img {len(data[0])}')
+    print(f'Number of imgages {len(data[0])}')
     print(f'target shape {data[1][0].shape}')
     print(f'input shape {data[0][0].shape}')
 
