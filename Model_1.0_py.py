@@ -301,7 +301,7 @@ discriminator_optimizer = tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
 # In[20]:
 
 
-def generate_images(model, test_input, tar):
+def generate_images(model, test_input, tar, step = 0):
   prediction = model(test_input, training=True)
   plt.figure(figsize=(15, 15))
 
@@ -314,7 +314,7 @@ def generate_images(model, test_input, tar):
     # Getting the pixel values in the [0, 1] range to plot.
     plt.imshow(display_list[i])
     plt.axis('off')
-  plt.savefig('generate_images.png')
+  plt.savefig(f'generate_images_{step}.png')
 
 
 # In[21]:
@@ -369,15 +369,15 @@ def fit(train_ds, test_ds, steps):
     r1=random.randint(0,len(train_ds[0])-1)
     input_image=train_ds[0][r1]
     target=[train_ds[1][r1]==1][0]
-    if (step) % 10 == 0:
-      display.clear_output(wait=True)
+    if (step) % 100 == 0:
+      #display.clear_output(wait=True)
 
       if step != 0:
         print(f'Time taken for 100 steps: {time.time()-start:.2f} sec\n')
 
       start = time.time()
 
-      generate_images(generator, example_input, example_target)
+      generate_images(generator, example_input, example_target, step = step)
       print(f"Step: {step}")
 
     train_step(input_image, target, step)
@@ -395,7 +395,7 @@ def fit(train_ds, test_ds, steps):
 # In[24]:
 
 
-fit(train_data, test_data, steps=500)
+fit(train_data, test_data, steps=50000)
 
 
 # In[25]:
