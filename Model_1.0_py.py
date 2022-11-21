@@ -49,7 +49,7 @@ def downsample(filters, size, apply_batchnorm=True):
 # In[4]:
 
 
-def load_data(test=False,Print=False,path='/data',nr_img=1498):
+def load_data(test=False,Print=False,path=f'{os.path.abspath(os.curdir)}/Deep_Learning_Project/Deep-Learning-main/data',nr_img=1498):
     train_data_input=[]
     train_data_target=[]
     
@@ -57,6 +57,7 @@ def load_data(test=False,Print=False,path='/data',nr_img=1498):
         n1=n
         if test:
             n1=f'{n}_a'
+ 
         try:
             test1=np.load(f'{path}/{n1}.npy')
             inputs=test1[:3].transpose()
@@ -85,10 +86,9 @@ train_data=load_data()
 
 # In[6]:
 
-
 def Get_stats(data):
     print(f'Number of training img {len(data[0])}')
-    print(f'target sahpe {data[1][0].shape}')
+    print(f'target shape {data[1][0].shape}')
     print(f'input shape {data[0][0].shape}')
 
 print('test_data:')
@@ -200,7 +200,7 @@ def Generator():
 # In[12]:
 
 
-#generator = Generator()
+generator = Generator()
 #dot_img_file = 'generator.png'
 #tf.keras.utils.plot_model(generator, to_file=dot_img_file, show_shapes=True, dpi=64)
 
@@ -273,7 +273,7 @@ def Discriminator():
 # In[17]:
 
 
-#discriminator = Discriminator()
+discriminator = Discriminator()
 #dot_img_file_d = 'discriminator.png'
 #tf.keras.utils.plot_model(discriminator, to_file=dot_img_file_d, show_shapes=True, dpi=64)
 
