@@ -6,7 +6,6 @@
 
 import os
 import numpy as np
-import cv2
 import tensorflow as tf
 import tensorflow.keras.backend as k
 from tensorflow.keras.utils import Sequence
@@ -23,8 +22,6 @@ from keras.callbacks import ModelCheckpoint, LearningRateScheduler
 from keras import backend as keras
 from tensorflow.python.keras.optimizers import TFOptimizer
 from tensorflow.keras import backend as K
-from skimage.transform import resize
-import numpy as np
 import math
 import matplotlib.pyplot as plt
 import random
@@ -112,7 +109,7 @@ print('train_data:')
 Get_stats(train_data)
 
 
-# In[9]:
+# In[17]:
 
 
 leakyrelu_alpha = 0.3
@@ -236,7 +233,7 @@ def unet(pretrained_weights=None, input_size=(256, 256, 3)):
         dice = (2. * intersection ) / (K.sum(y_true_f) + K.sum(y_pred_f))
         return -dice
 
-    model.compile(optimizer=Adam(lr=1e-4), loss='categorical_crossentropy', metrics=['accuracy'])
+    model.compile(optimizer=Adam(lr=1e-2), loss=compute_loss, metrics=['accuracy'])
 
     if (pretrained_weights):
         model.load_weights(pretrained_weights)
@@ -247,7 +244,7 @@ model = unet()
 model.summary()
 
 
-# In[10]:
+# In[18]:
 
 
 class testgenerator(Sequence):
@@ -269,7 +266,7 @@ class testgenerator(Sequence):
         return np.array(batch_x),np.array(batch_y)
 
 
-# In[15]:
+# In[19]:
 
 
 batch_size=8
@@ -278,31 +275,55 @@ print(train_data[1])
 #val_data_gen = testgenerator(test_data[0][0],test_data[1][0],1)
 
 
-# In[17]:
+# In[40]:
 
 
 history = model.fit_generator(train_data_gen, epochs=100,steps_per_epoch=52)#, steps_per_epoch=5
 
 
-# In[ ]:
+# In[24]:
 
 
-result = model.predict(test_data[0][1])
+print(test_data[0][0])
 
 
-# In[ ]:
+# In[37]:
+
+
+def dise(y, y_pred):
+        y_true_f = K.flatten(y)
+        y_pred_f = K.flatten(y_pred)
+        intersection = K.sum(y_true_f * y_pred_f)
+        dice = (2. * intersection ) / (K.sum(y_true_f) + K.sum(y_pred_f))
+        return -dice
+
+
+# In[32]:
+
+
+result = model.predict(train_data[0][0][tf.newaxis,...])
+
+
+# In[39]:
+
+
+
+print(dise(result,train_data[1][0]))
+
+
+# In[33]:
 
 
 print(result.shape)
 
 
-# In[ ]:
+# In[34]:
 
 
 print(result)
 
 
-# In[ ]:
+# In[35]:
 
 
 plt.imshow(tf.argmax(result[0],axis=-1))
